@@ -13,8 +13,8 @@ Status: tested on 9 November 2026. TensorFold's CUDA support for Ripple is in tw
 maintainers have not yet decided whether to take the Ripple family
 ([#2171](https://github.com/ashhart/TensorFold/issues/2171)). The tested build is the branch
 [`ricursive-cuda-speed`](https://github.com/jrb-ai/tensorfold-ripple/tree/ricursive-cuda-speed) of
-jrb-ai/tensorfold-ripple, at `2c35738cd`. It is #2475 plus two changes: a fix to how the drafter prices rounds that
-several streams share, and faster prompt kernels.
+jrb-ai/tensorfold-ripple, at `2c35738cd`. It is #2475 at `0c4f8c2f3`, which has the fix to how the drafter prices
+rounds that several streams share, plus faster prompt kernels that are not yet in a pull request.
 
 ## Results
 
@@ -34,8 +34,9 @@ Total tok/s, plain → drafted:
 - One stream on greedy code runs at 24.1 tok/s, 4.6x plain. Eight streams run at 124.4 tok/s in total, 15.5 tok/s for
   each stream, 3.3x plain.
 - At 8 streams on greedy code, each stream drafts about 8 tokens a round and the model keeps about 6.
-- The shared-round fix matters when streams share a round. Without it (#2475 at `3065161da`), 8 streams on greedy code
-  gave 49.1 tok/s in total, and each stream drafted about 1 token a round. One stream is the same with or without it.
+- The shared-round fix matters when streams share a round. Without it (#2475 before the fix, at `3065161da`), 8
+  streams on greedy code gave 49.1 tok/s in total, and each stream drafted about 1 token a round. One stream is the
+  same with or without it.
 - All 180 drafted replies equal the plain replies (90 greedy, 90 sampled).
 - The speed-up is only as good as the drafter. It gains most on greedy code, where the next tokens are the most
   predictable.
@@ -102,4 +103,12 @@ Tool calls with `tool_choice` `"auto"` work.
 ## Licences and credits
 
 - Ripple-65B-Preview NVFP4 and Ripple-65B-Preview-DFlash2: Ricursive AI, Apache-2.0.
-- TensorFold: Apache-2.0. Its Ripple CUDA support and DFlash2 drafter code are in the pull requests above.
+- TensorFold, by [ashhart](https://github.com/ashhart): Apache-2.0. Its Ripple CUDA support and DFlash2 drafter code
+  are in the pull requests above.
+- [BobClawblaw](https://github.com/BobClawblaw) wrote TensorFold's Ripple support on Metal
+  ([#2231](https://github.com/ashhart/TensorFold/pull/2231) and
+  [#2260](https://github.com/ashhart/TensorFold/pull/2260)). The CUDA pull requests build on it.
+- [ajensenwaud](https://github.com/ajensenwaud) runs Ripple and its drafter on two GB10s
+  ([#2522](https://github.com/ashhart/TensorFold/pull/2522) and
+  [#2523](https://github.com/ashhart/TensorFold/pull/2523)).
+- This recipe and its scripts: Apache-2.0 (LICENSE), copyright 2026 JRB AI.
